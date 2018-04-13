@@ -1,0 +1,289 @@
+
+
+ - SeqList.h文件
+ 
+
+```
+#include<stdio.h>
+typedef int DataType;
+#define MAX_SIZE 10 
+typedef struct SeqList
+{
+	DataType _array[MAX_SIZE];
+	int _size; // 表示顺序表中有效元素的个数 
+}SeqList, *PSeqList;
+
+typedef struct SeqList* PSeqList;
+
+void SeqListInit(PSeqList ps);// 顺序表的初始化 
+
+void SeqListPushBack(PSeqList ps, DataType data);// 顺序表的尾插 
+ 
+void SeqListPopBack(PSeqList ps);// 顺序表的尾删
+
+void SeqListPushFront(PSeqList ps, DataType data);// 顺序表的头插 
+ 
+void SeqListPopFront(PSeqList ps);// 顺序表的头删
+
+void SeqListInsert(PSeqList ps, int pos, DataType data);// 顺序表pos位置插入元素data 
+ 
+void SeqListErase(PSeqList ps, int pos);// 删除顺序表pos位置元素
+ 
+void Remove(PSeqList ps, DataType data);// 移除顺序表中第一个值为data的元素
+
+void RemoveAll(PSeqList ps, DataType data);// 移除顺序表中所有值为data的元素
+
+// 在顺序表中查找值为data的元素，找到返回该元素在顺序表中的位置，否则返回-1 
+int SeqListFind(PSeqList ps, DataType data);
+
+int SeqListSize(PSeqList ps);// 获取顺序表中元素的个数
+
+void PrintSeqList(PSeqList ps);// 打印顺序表 
+
+void BubbleSort(PSeqList ps);// 使用冒泡排序对顺序表中的元素进行排序 
+
+void SelectSort(PSeqList ps); // 使用选择排序堆顺序表中的元素进行排序 
+
+void SeqListInit(PSeqList ps)// 顺序表的初始化 
+{
+	if (ps == NULL)
+	{
+		return;
+	}
+	else ps->_size = 0;
+}
+void SeqListPushBack(PSeqList ps, DataType data)// 顺序表的尾插 
+{
+	if (ps == NULL)
+	{
+		return;
+	}
+	if (ps->_size == MAX_SIZE)
+	{
+		printf("顺序表已满,不可插入！\n");
+	}
+	else
+	{
+		ps->_array[ps->_size] = data;
+		ps->_size++;
+	}
+}
+void SeqListPopBack(PSeqList ps)// 顺序表的尾删
+{
+	if (ps == NULL)
+	{
+		return;
+	}
+	if (ps->_size == 0)
+	{
+		printf("顺序表已空，无法删除！\n");
+	}
+	else
+	{
+		ps->_size--;
+	}
+}
+void SeqListPushFront(PSeqList ps, DataType data)// 顺序表的头插 
+{
+	if (ps == NULL)
+		return;
+	if (ps->_size == MAX_SIZE)
+		printf("顺序表已满，无法插入！\n");
+	else
+	{
+		int i = ps->_size - 1;
+		for (; i >= 0; i--)
+		{
+			ps->_array[i + 1] = ps->_array[i];
+		}
+		ps->_array[0] = data; ps->_size++;
+	}
+}
+void SeqListPopFront(PSeqList ps)// 顺序表的头删
+{
+	if (ps == NULL)
+		return;
+	if (ps->_size == 0)
+		printf("顺序表已空，无法删除！\n");
+	else
+	{
+		int i = 0;
+		for (; i < ps->_size-1; i++)
+		{
+			ps->_array[i] = ps->_array[i + 1];
+		}
+		ps->_size--;
+	}
+}
+void SeqListInsert(PSeqList ps, int pos, DataType data)// 顺序表pos位置插入元素data 
+{
+	if (ps == NULL)
+		return;
+	if (ps->_size == MAX_SIZE)
+		printf("顺序表已满，无法插入！\n");
+	else
+	{
+		int i = ps->_size - 1;;
+		for (; i>=pos-1; i--)
+		{
+			ps->_array[i + 1] = ps->_array[i];
+		}
+		ps->_array[pos - 1] = data; ps->_size++;
+	}
+}
+void SeqListErase(PSeqList ps, int pos)// 删除顺序表pos位置元素
+{
+	if (ps == NULL)
+		return;
+	if (ps->_size == 0)
+		printf("顺序表已空，无法删除！\n");
+	else
+	{
+		int i = pos - 1;
+		for (; i < ps->_size-1; i++)
+		{
+			ps->_array[i] = ps->_array[i + 1];
+		}
+		ps->_size--;
+	}
+}
+void Remove(PSeqList ps, DataType data)// 移除顺序表中第一个值为data的元素
+{
+	if (ps == NULL)
+		return;
+	int count = 0;
+	int i = 0;
+	for (; i < ps->_size; i++)
+	{
+		if (ps->_array[i] == data)count = i+1;
+	}
+	if (i == ps->_size)
+	{
+		printf("该顺序表中无该元素！\n"); return;
+	}
+	SeqListErase(ps,  count);
+}
+void RemoveAll(PSeqList ps, DataType data)// 移除顺序表中所有值为data的元素
+{
+	if (NULL == ps)
+		return;
+	int count = 0;
+	int i = 0;
+	for (; i < ps->_size; i++)
+	{
+		if (ps->_array[i] == data)count++;
+		else
+		{
+			ps->_array[i - count] = ps->_array[i];
+		}
+	}
+	ps->_size -= count; if (i == ps->_size)printf("该顺序表中无该元素!\n");
+}
+// 在顺序表中查找值为data的元素，找到返回该元素在顺序表中的位置，否则返回-1 
+int SeqListFind(PSeqList ps, DataType data)
+{
+	if (ps == NULL)
+		return;
+	int i = 0;
+	for (; i < ps->_size; i++)
+	{
+		if (ps->_array[i] == data)
+			return i;
+	}
+	return -1;
+}
+// 获取顺序表中元素的个数 
+int SeqListSize(PSeqList ps)
+{
+	return ps->_size;
+}
+void PrintSeqList(PSeqList ps)// 打印顺序表 
+{
+	int i = 0;
+	for (; i < ps->_size; i++)
+	{
+		printf("%d ", ps->_array[i]);
+	}
+	printf("\n");
+}
+void BubbleSort(PSeqList ps)// 使用冒泡排序对顺序表中的元素进行排序 
+{
+	if (ps == NULL)
+		return;
+	int i = 0, j = 0, flag = 0;
+	for (; i < ps->_size-1; i++)
+	{
+		flag = 0;
+		for (j = 0; j < ps->_size - i - 1; j++)
+		{
+			if (ps->_array[j] > ps->_array[j + 1])
+			{
+				ps->_array[j] ^= ps->_array[j + 1];
+				ps->_array[j + 1] ^= ps->_array[j];
+				ps->_array[j] ^= ps->_array[j + 1];
+				flag = 1;
+			}
+		}
+		if (flag == 0)return;
+	}
+}
+void SelectSort(PSeqList ps) // 使用选择排序堆顺序表中的元素进行排序
+{
+	if (NULL == ps)
+		return;
+	int i = 0, j = 0;
+	int ret = 0;
+	for (i = 0; i < ps->_size-1; i++)
+	{
+		ret = i;
+		for (j = i+1; j < ps->_size; j++)
+		{
+			if (ps->_array[ret] > ps->_array[j])ret = j;
+		}
+		if (ret != i)
+		{
+			ps->_array[i] ^= ps->_array[ret];
+			ps->_array[ret] ^= ps->_array[i];
+			ps->_array[i] ^= ps->_array[ret];
+		}
+		
+	}
+}
+```
+
+ - test.c
+ 
+
+```
+#include"SeqList.h"
+int main()
+{
+	SeqList list;
+	SeqList *ps=&list;
+	SeqListInit(ps);
+	SeqListPushBack(ps, 1);
+	SeqListPushBack(ps, 3);
+	SeqListPushBack(ps, 0);
+	SeqListPushBack(ps, 2);
+	SeqListPushBack(ps, 5);
+	SeqListPushBack(ps, 4);
+	SeqListPushBack(ps, 6);
+	SeqListPushBack(ps, 0);
+	SeqListPushBack(ps, 7);
+	//SeqListPushBack(ps, 6); 
+	PrintSeqList(ps);
+	SeqListPopBack(ps); PrintSeqList(ps);
+	SeqListPushFront(ps, 10); PrintSeqList(ps);
+	SeqListPopFront(ps); PrintSeqList(ps);
+	SeqListInsert(ps, 5, 0); PrintSeqList(ps);
+	SeqListErase(ps, 5); PrintSeqList(ps);
+	Remove(ps, 4); PrintSeqList(ps);
+	RemoveAll(ps, 0); PrintSeqList(ps);
+	printf("下标是:%d\n", SeqListFind(ps, 5));
+	printf("元素个数是:%d\n", SeqListSize(ps));
+	//BubbleSort(ps); PrintSeqList(ps);
+	SelectSort(ps); PrintSeqList(ps);
+	system("pause");
+	return 0;
+}
+```
