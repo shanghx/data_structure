@@ -1,0 +1,200 @@
+//List.h
+#include<stdio.h>
+#include<stdlib.h>
+#include<assert.h>
+typedef int DataType;
+typedef struct SeqListD
+{
+	DataType *arr;   //顺序表头指针
+	int capacity;    //空间容量
+	int size;        //有效元素个数
+}SeqListD,*PSeqListD;
+
+void SeqListDInit(PSeqListD ps, int capacity);//数组初始化
+
+int CheckCapacity(PSeqListD ps);// 对顺序表进行增容 
+
+void SeqListDPushBack(PSeqListD ps, DataType data);//尾插
+
+void SeqListDPopBack(PSeqListD ps);//尾删
+
+void SeqListDInsert(PSeqListD ps, int pos, DataType data);//任意位置插入
+
+void SeqListDErase(PSeqListD ps, int pos);//任意位置删除
+
+int SeqListDSize(PSeqListD ps);// 获取元素个数 
+
+int SeqListDCapacity(PSeqListD ps);// 获取顺序表的容量 
+
+int SeqListDEmpty(PSeqListD ps);//判空
+
+void SeqListDClear(PSeqListD ps);// 将顺序表中的元素清空 注意：不改变顺序表空间的大小 
+
+void SeqListDDestroy(PSeqListD ps);//销毁顺序表
+
+void SeqListDPrint(PSeqListD ps);//打印顺序表
+//List.c
+#include"List.h"
+void SeqListDInit(PSeqListD ps, int capacity)//数组初始化
+{
+	if (NULL == ps)
+		return;
+	ps->arr = (DataType*)malloc(capacity * sizeof(DataType));
+	if (ps->arr == NULL)
+	{
+		printf("空间申请失败!!!\n");
+		return;
+	}
+	ps->capacity = capacity;
+	ps->size = 0;
+}
+int CheckCapacity(PSeqListD ps)// 对顺序表进行增容 
+{
+	if (ps == NULL)
+		return;
+	ps->arr = (DataType*)realloc(ps->arr, sizeof(DataType)*(ps->capacity * 2));
+	if (ps == NULL)
+	{
+		printf("空间申请失败!!!\n");
+		return;
+	}
+	ps->capacity = ps->capacity * 2;
+}
+void SeqListDPushBack(PSeqListD ps, DataType data)//尾插
+{
+	if (NULL == ps)
+		return;
+	if (ps->size == ps->capacity)
+
+	{
+		CheckCapacity(ps);
+	}
+
+	ps->arr[ps->size] = data;
+	ps->size++;
+}
+void SeqListDPopBack(PSeqListD ps)//尾删
+{
+	if (NULL == ps)
+		return;
+	if (ps->size == 0)
+	{
+		printf("顺序表已空,无发删除!!!\n");
+		return;
+	}
+	ps->size--;
+}
+void SeqListDInsert(PSeqListD ps, int pos, DataType data)//任意位置插入
+{
+	if (NULL == ps)
+		return;
+	if (ps->capacity == ps->size)
+		CheckCapacity(ps);
+	int i = ps->size - 1;;
+	for (; i >= pos - 1; i--)
+	{
+		ps->arr[i + 1] = ps->arr[i];
+	}
+	ps->arr[i+1] = data;
+	ps->size++;
+}
+void SeqListDErase(PSeqListD ps, int pos)//任意位置删除
+{
+	if (ps == NULL)
+		return;
+	if (ps->size == 0)
+
+	{
+		printf("顺序表已空，无法删除!!!\n");
+		return;
+	}
+	int i = pos - 1;
+	for (; i <= ps->size - 2; i++)
+	{
+		ps->arr[i] = ps->arr[i + 1];
+	}
+	ps->size--;
+}
+int SeqListDSize(PSeqListD ps)// 获取元素个数 
+{
+	if (NULL == ps)
+		return;
+	return ps->size;
+}
+int SeqListDCapacity(PSeqListD ps)// 获取顺序表的容量 
+{
+	if (NULL == ps)
+		return;
+	return ps->capacity;
+}
+int SeqListDEmpty(PSeqListD ps)//判空
+{
+	if (NULL == ps)
+	{
+		assert(0);
+		return -1;
+	}
+
+	if (ps->size == 0)
+		return 0;
+	else return 1;
+}
+void SeqListDClear(PSeqListD ps)// 将顺序表中的元素清空 
+{
+	if (NULL == ps)
+		return;
+	ps->size = 0;
+	printf("顺序表已清空\n");
+}
+void SeqListDDestroy(PSeqListD ps)//销毁顺序表
+{
+	if (NULL == ps)
+		return;
+	ps->size = 0;
+	ps->capacity = 0;
+	free(ps->arr);
+	ps->arr = NULL;
+	printf("顺序表已销毁\n");
+}
+void SeqListDPrint(PSeqListD ps)//打印顺序表
+{
+	if (NULL == ps)
+		return;
+	int i = 0;
+	for(; i < ps->size; i++)
+	{
+		printf("%d ", ps->arr[i]);
+	}
+	printf("\n");
+}
+test.c
+
+#include"List.h"
+int main()
+{
+	SeqListD List;
+	PSeqListD *ps= &List;
+	SeqListDInit(ps, 10);
+	SeqListDPushBack(ps, 2);
+	SeqListDPushBack(ps, 3);
+	SeqListDPushBack(ps, 5);
+	SeqListDPushBack(ps, 9);
+	SeqListDPushBack(ps, 6);
+	SeqListDPushBack(ps, 7);
+	SeqListDPushBack(ps, 8);
+	SeqListDPushBack(ps, 0);
+	SeqListDPushBack(ps, 4);
+	SeqListDPushBack(ps, 1); SeqListDPrint(ps);
+	SeqListDInsert(ps, 7, 100); SeqListDPrint(ps);
+	printf("此时顺序表的元素个数是:%d\n", SeqListDSize(ps));
+	printf("此时顺序表的容量大小是:%d\n", SeqListDCapacity(ps));
+	SeqListDPopBack(ps); SeqListDPrint(ps);
+	SeqListDInsert(ps, 5, 10); SeqListDPrint(ps);
+	SeqListDErase( ps, 5); SeqListDPrint(ps);
+	printf("此时顺序表的元素个数是:%d\n",SeqListDSize( ps));
+	printf("此时顺序表的容量大小是:%d\n",SeqListDCapacity(ps));
+	SeqListDClear(ps);SeqListDPrint(ps);
+	SeqListDDestroy( ps); SeqListDPrint(ps);
+	system("pause");
+}
+
