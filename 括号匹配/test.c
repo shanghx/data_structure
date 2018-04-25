@@ -1,7 +1,6 @@
 #include"Stack.h"
 int main()
 {
-	
 	char a[] = "(())abc{[(])}";
 	char b[] = "(()))abc{[]}";
 	char c[] = "(()()abc{[]}";
