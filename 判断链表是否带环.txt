@@ -1,0 +1,27 @@
+PNode IsListWithCircle(PNode pHead)// 判断链表是否带环，返回相遇点---注意推导公式
+{
+	PNode pFast = NULL;
+	PNode pSlow = NULL;
+	if (NULL == pHead)
+		return NULL;
+	//思路:快指针每次走两步，慢指针每次走一步，如果链表带环，那么里昂个指针一定会在环里面相遇
+	//否则，链表不带环(需要注意，快指针只能每次走两步，才能判断是否带环)
+	pFast = pHead; pSlow = pHead;
+	pFast = pFast->p_next->p_next;
+	pSlow = pSlow->p_next;
+	while (pFast != pSlow&&pFast->p_next)
+	{
+		pFast = pFast->p_next->p_next;
+		pSlow = pSlow->p_next;
+	}
+	if (pFast==pSlow)
+	{
+		printf("链表带环!!!\n");
+		return pFast;//return pSlow;
+	}
+	else
+	{
+		printf("链表不带环!!!\n");
+		return NULL;
+	}
+}
