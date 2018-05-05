@@ -1,0 +1,19 @@
+PNode GetCircleEnter(PNode pHead, PNode pMeetNode)// 获取环的入口点
+{
+	PNode pFast = NULL;
+	PNode pSlow = NULL;
+	if (pHead == NULL)
+		return NULL;
+	if (IsListWithCircle(pHead))
+	{
+		printf("链表不带环，无入口点!!!\n");
+		return NULL;
+	}
+	pSlow = pHead;
+	pFast = pMeetNode;
+	while (pSlow != pFast)
+	{
+		pFast = pFast->p_next;
+		pSlow = pSlow->p_next;
+	}
+	return pFast;//return pSlow;
