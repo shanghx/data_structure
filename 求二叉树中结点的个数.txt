@@ -1,0 +1,8 @@
+int BinTreeSize(PBTNode pRoot)// 求二叉树中结点的个数 
+{
+	if (pRoot == NULL)
+		return 0;
+	
+	return BinTreeSize(pRoot->_pLeft) + BinTreeSize(pRoot->_pRight)+1;
+		
+}
