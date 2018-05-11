@@ -1,0 +1,9 @@
+int GetKLevelNode(PBTNode pRoot, int K)// 求二叉树中第K层结点的个数 
+{
+	if (pRoot == NULL||K < 1 )
+		return 0;
+	if (K == 1)      //K是第一层，返回1
+		return 1;
+	//否则，求当前结点的左子树结点和右子树结点之和
+	return GetKLevelNode(pRoot->_pLeft, K - 1) + GetKLevelNode(pRoot->_pRight, K - 1);
+}
