@@ -1,0 +1,11 @@
+int Height(PBTNode pRoot)// 求二叉树的高度 
+{
+	int LeftHigh = 0;
+	int RightHigh = 0;
+	if(pRoot == NULL)
+		return 0;
+	LeftHigh=Height(pRoot->_pLeft)+1;   //递归计算左子树的深度
+	RightHigh = Height(pRoot->_pRight)+1;  //递归计算右子树的深度
+	return LeftHigh > RightHigh ? LeftHigh : RightHigh;  //返回深度大的值，作为树的高度
+
+}
