@@ -1,0 +1,79 @@
+#include<stdio.h>
+#include<stdlib.h>
+typedef int QElemType;
+#define MAXQSIZE 100
+typedef struct {
+	QElemType *base;                   //初始化的动态分配空间
+	int front;                //队头指针
+	int rear;                 //队尾指针
+}SqQueue;
+/*建立空队列*/
+void TnitQueue(SqQueue &Q)
+{
+	Q.base = (QElemType *)malloc(MAXQSIZE * sizeof(QElemType));   //先分配空间
+	if (!Q.base)return;        //如果分配失败，跳出
+	Q.front = Q.rear = 0;         //让队头等于队尾
+}
+/*入队操作*/
+void EnQueue(SqQueue & Q, QElemType e)
+{
+	
+	if ((Q.rear + 1) % MAXQSIZE == Q.front)return;     //判断队列是否满，不满则入队
+	Q.base[Q.rear] = e;       //把入队的值传给队列的元素
+	Q.rear = (Q.rear + 1) % MAXQSIZE;    //另外，让其下标加1
+}
+/*出队操作*/
+QElemType DeQueue(SqQueue &Q )
+{
+	QElemType e;            //定义一个变量
+	if (Q.front == Q.rear)return 0;             //判断队是否空
+	e = Q.base[Q.front];                          //不空则先将元素赋值给额，将其返回
+	Q.front = (Q.front + 1) % MAXQSIZE;                       //出队，将其下标后移
+	return e;
+}
+/*输出队列元素函数*/
+void display(SqQueue &Q)
+{
+	int front, rear;
+	front = Q.front; rear = Q.rear;            //赋值目的是让队列中的下标不变
+	while (front !=rear)
+	{
+		
+		printf("%d ", Q.base[front]); front++;         //如果队不空，打印出其每个元素的值
+	}
+}
+/*判断队列是否满*/
+void QueueFull(SqQueue &Q)
+{
+	if ((Q.rear + 1) % MAXQSIZE == Q. front)  
+		printf("此时队已满\n");
+}
+/*判断队是否空 */
+void QueueEmpty(SqQueue &Q)
+
+{
+	if (Q.front == Q.rear)
+		printf("此时队为空\n");
+}
+/*主函数*/
+int main() 
+{
+	int i,n,x;
+	SqQueue S;
+	TnitQueue(S); printf("建立队列\n");
+	QueueEmpty(S);
+	printf("开始入队\n");
+	for (i = 1; i <100; i++)
+		EnQueue(S, i);
+	printf("入队完成,数据如下:\n");
+	display(S); printf("\n"); QueueFull(S);
+	printf("开始出队\n"); printf("出队元素是:");
+	for(i=1;i<50;i++)
+	{ 
+		x = DeQueue(S); printf("%d ", x);}
+	printf("\n");
+	printf("出队完成，新的数据为:");
+	display(S);
+	system("pause");
+	return 0;
+}
