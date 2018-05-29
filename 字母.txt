@@ -1,0 +1,112 @@
+#include<stdio.h>
+#include<stdlib.h>
+typedef struct  A                                    //定义结构体Test
+{
+	char data;
+	struct A *next;
+}Test;
+Test *head, *p, *q;                                //定义结构体指针
+int m = sizeof(Test);
+void build()                                 //建立链表 
+{
+	p = (Test*)malloc(m);                        //先开辟一个空间赋值给p,再让head指针指向该地址
+	head = p;
+	p = (Test*)malloc(m);
+	head->next = p;
+	for (int i = 0; i<26; i++)                        //通过循环给每个节点data域赋值
+	{
+		p->data = 'a' + i;
+		if (i == 25)                                      //当i==25说明已经循环26次，此时让p->next指向NULL，break跳出循环
+		{
+			p->next = NULL;
+			break;
+		}
+		p->next = (Test*)malloc(m);                             //若i!=25，让p->next等于一个新的节点，再让p指向这个新的节点
+		p = p->next;
+	}
+}
+void display()                                             //输出函数 
+{
+	p = head->next;                                                //从head开始遍历，当最后一个节点的next等于时，此时p指向NULL，跳出循环
+	while (p != NULL)
+	{
+		printf("%c ", p->data);
+
+		p = p->next;
+	}
+	printf("\n");                                             //换行
+}
+void del()                                                        //删除函数 
+{
+	int j = 1, n = 1; char  y;
+	p = head->next;                                                //从head开始遍历，先提示输出要修改的节点的序号，开始遍历
+	printf("input要删除的字母:");
+	scanf_s("%c", &y); getchar();
+	while (p)                          //找到输入字母对应元素的序号
+	{
+
+		if (y == p->data)
+		{
+			break;
+		} p = p->next; n++;
+	}
+	if (p == NULL)                           //找到输入字母对应元素的序号
+	{
+		printf("没有该字母\n");
+		return;
+	}
+	p = head;
+	while (j<n)                                       //当找到要删除的节点的前一个节点跳出循环，此时p->next就是要删除的节点
+	{
+		p = p->next; ++j;
+	}
+	{                                                                   //找到之后，开始删除，先让q指向p->next（也就是此时q就是要删除的节点），
+		q = p->next; p->next = q->next;                          //再让要删除的节点的next指向p->next(也就是让删除的节点的上个节点指向要删除节点的下个节点）
+		free(q);                                                        //然后释放点要删除的节点       
+		display();                                                      //打印出当前的节点
+	}
+}
+void insert()                                                     //插入函数 
+{
+	int i = 1, n = 1; char  y, t; Test *s;
+	p = head->next;                                                //从head开始遍历，先提示输出要修改的节点的序号，开始遍历
+	printf("input要插入其后面的字母:");
+
+	scanf_s("%c", &y); getchar();
+	while (p)                              //找到输入字母对应元素的序号
+	{
+
+		if (y == p->data)
+		{
+			break;
+		} p = p->next; n++;
+	}
+	if (p == NULL)                          //判断是否有该元素
+	{
+		printf("没有该字母\n");
+		return;
+	}
+	p = head;
+	while (i <= n)                                               //找到要插入的节点的序号
+	{
+		p = p->next; ++i;
+	}
+	{
+		printf("输入插入的数据:");
+
+		scanf_s("%c", &t); getchar();
+		s = (Test *)malloc(m); s->data = t;     //插入之前，先开辟一个空间，让后给该节点data域赋值，此时让s->next指向p->next，再把s赋值给p->next,
+		s->next = p->next; p->next = s;       //此时p指向新节点s,s指向p之前的下个节点
+		printf("新的数据如下:");
+		display();
+	}
+}
+int main()                   //主函数
+{
+	build();
+	display();
+	del();
+	insert(); 
+	system("pause");
+	return 0;
+}
