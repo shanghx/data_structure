@@ -1,0 +1,37 @@
+void AdjustDown(int *arr, int root, int size)//建大堆
+{
+	int parent = root;
+	int child = parent * 2 + 1;
+	while (child < size)
+	{
+		//保证child指向较大节点
+		if (child + 1 < size && arr[child + 1] > arr[child])
+			child += 1;
+		if (arr[child] > arr[parent])
+		{
+			std::swap(arr[child], arr[parent]);
+			parent = child;//下滤
+			child = parent * 2 + 1;
+		}
+		else
+			break;
+	}
+}
+//堆排序递归
+void HeapSort(int *arr, int size)
+{
+	assert(arr && size > 1);
+	//从最后一个非叶子节点建堆
+	for (int idx = (size - 2) / 2; idx >= 0; --idx)
+	{
+		AdjustDown(arr, idx, size);//下滤调整
+	}
+	int end = size - 1;
+	while (end > 0)
+	{
+		//堆顶与最后一个节点交换，升序
+		std::swap(arr[0], arr[end]);
+		AdjustDown(arr, 0, end);//下滤调整
+		--end;
+	}
+}
