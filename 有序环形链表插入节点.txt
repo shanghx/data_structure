@@ -1,0 +1,142 @@
+
+typedef int DataType;
+
+typedef struct node
+{
+	DataType data;
+	struct node *p_next;
+}Node ,*PNode;
+
+
+void SListPushBack(PNode* pHead, DataType data)// 尾插
+{
+	PNode pCur = NULL;
+	PNode pRet = NULL;
+	assert(pHead);
+	if (*pHead == NULL)
+	{
+		*pHead = BuyNewNode(data);
+		(*pHead)->p_next = NULL;
+		return;
+	}
+	else
+	{
+		pCur = *pHead;
+		while (pCur->p_next)
+		{
+			pCur = pCur->p_next;
+		}
+		pRet = BuyNewNode(data);
+		pCur->p_next = pRet;
+		pRet->p_next = NULL;
+	}
+	return;
+}
+
+PNode SListFindNode(PNode pHead,DataType data)// 在链表中查找值为data的元素，找到后返回值为data的结点
+{
+	PNode pCur = pHead;
+	//检测链表是否为空
+	if (pHead == NULL)
+	{
+		printf("链表中无元素!!!\n");
+		return NULL;
+	}
+	//链表不为空
+	while (pCur)
+	{
+		if (pCur->data == data)
+			return pCur;
+		pCur = pCur->p_next;
+	}
+	return NULL;
+}
+
+void PrintfSList(PNode pHead) //打印链表
+{
+	if (pHead == NULL)
+	{
+		printf("链表为空!!\n");
+		return;
+	}
+	PNode pCur = pHead;
+	printf("%d->", pCur->data);
+	pCur = pCur->p_next;
+	while (pCur&&pCur!=pHead)
+	{
+		printf("%d ->", pCur->data);
+		pCur = pCur->p_next;
+	}
+	if(pCur==NULL)
+	printf("NULL");
+	else
+	{
+		
+			printf("%d(head)", pCur->data); printf("该链表是环形链表:");
+	}
+	printf("\n");
+}
+PNode InsertInCircle(PNode head,DataType data)//插入一个节点在有序链表中，并且插入之后链表有序
+{
+	PNode pCur = NULL;
+	//如果环形链表是空，则将该节点插入，返回
+	if (head == NULL)
+	{
+		pCur = (PNode)malloc(sizeof(Node));
+		pCur->data = data;
+		pCur->p_next = pCur;
+		return pCur;
+	}
+	else
+	{
+		//先找到只要插入的位置
+		pCur = head->p_next;
+		PNode pPre = head;
+		while (pCur != head)
+		{
+			if (pPre->data <= data && pCur->data >= data)
+			{
+				PNode pNode = (PNode)malloc(sizeof(Node));
+				pNode->data = data;
+				pPre->p_next = pNode;
+				pNode->p_next = pCur;
+				return head;
+			}
+			pPre=pPre->p_next;
+			pCur = pCur->p_next;
+		}
+		//出循环,说明此时data是链表中最大或者是最小的节点
+		//此时pCur==head
+		PNode pNode = (PNode)malloc(sizeof(Node));
+		pNode->data = data; 
+		pPre->p_next = pNode;
+		
+		pNode->p_next = pCur;
+		if (data < head->data)
+			return pNode;
+		else
+			return head;
+	}
+}
+
+void testInsertInCircle()
+{
+	PNode head = NULL;
+	SListPushBack(&head, 1);
+	SListPushBack(&head, 2);
+	SListPushBack(&head, 3);
+	SListPushBack(&head, 4);
+	SListPushBack(&head, 5);
+	PNode pTail=SListFindNode(head,5);
+	pTail->p_next = head;
+	PrintfSList(head);
+
+
+	printf("有序环形链表插入值为data的节点:\n");
+	PNode cur=InsertInCircle(head, 6);
+	PrintfSList(cur);
+	
+}
+
+
+
