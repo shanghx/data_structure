@@ -1,0 +1,28 @@
+void PrintSameNode(PNode head1, PNode head2)//打印两个有序链表的公共部分
+{
+	//如果某一个链表为空，直接返回即可
+	if (head1 == NULL || head2 == NULL)
+	{	
+		return;
+	}
+	PNode cur1 = head1, cur2 = head2;
+	while (cur1 != NULL && cur2 != NULL)
+	{
+		if (cur1->data < cur2->data)
+		{
+			cur1 = cur1->p_next;
+		}
+		else if (cur1->data > cur2->data)
+		{
+			cur2 = cur2->p_next;
+		}
+		
+		else
+		{
+			printf("%d ", cur1->data);
+			cur1 = cur1->p_next;
+			cur2 = cur2->p_next;
+		}
+	}
+	return;
+}
