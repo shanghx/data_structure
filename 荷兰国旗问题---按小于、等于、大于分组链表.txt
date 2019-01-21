@@ -1,0 +1,65 @@
+PNode GroupList(PNode head, DataType data)//荷兰国旗问题，按小于等于大于分组链表
+{
+	if (head == NULL)
+		return head;
+	PNode less = NULL, mid = NULL, more = NULL;//遍历三个小链表的指针
+	PNode lesshead= NULL, midhead = NULL, morehead = NULL;//用来保存三个链表的头
+	PNode cur = head;//遍历原始链表的指针
+	while (cur != NULL)
+	{
+		if (cur->data < data)
+		{
+			if (less != NULL)
+			{
+				//往后更新节点
+				less->p_next = cur;
+				less = cur;		
+			}	
+			else
+			{
+				//保存头节点
+				less = cur;
+				lesshead = cur;
+		
+			}
+		}			
+		else if (cur->data == data)
+		{
+			if (mid != NULL)
+			{
+				//往后更新节点
+				mid->p_next = cur;
+				mid = cur;
+				
+			}
+			else
+			{
+				//保存头节点
+				mid = cur;
+				midhead = cur;
+			}
+		}
+		else
+		{
+			if (more != NULL)
+			{
+				//往后更新节点
+				more->p_next = cur;
+				more = cur;		
+			}		
+			else
+			{
+				//保存头节点
+				more = cur;
+				morehead = cur;
+			}
+		}
+		//往后遍历原始链表
+		cur = cur->p_next;		
+	}
+	//连接三个链表
+	less->p_next = midhead;
+	mid->p_next = morehead;
+	more->p_next = NULL;
+	return lesshead;
+}
