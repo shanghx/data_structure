@@ -1,0 +1,58 @@
+
+#include<iostream>
+#include<assert.h>
+using namespace std;
+//计数排序
+void CountSort(int* a, int n)
+{
+	assert(a);
+	//1.先找到原数组的最大最小值
+	int max = a[0];
+	int min = a[0];
+	for (int i = 0; i < n; i++)
+	{
+		if (a[i] > max)
+			max = a[i];
+		if (a[i] < min)
+			min = a[i];
+	}
+	//2.将数组里面的值遍历一遍找到每个数出现的次数，保存在count数组里面
+	//先计算数组中值的范围，从而确定新开辟空间的大小
+	int size = max - min + 1;
+	int* count = new int[size];
+	//将counr数组一定要初始化为0
+	memset(count, 0, sizeof(int)*size);
+	//计算出现的次数
+	int index = 0;
+	for (int i = 0; i < n; i++)
+	{
+		index = a[i] - min;
+		count[index]++;
+	}
+
+	//3.将数据按出现次数还原到原数组中
+	index = 0;
+	for (int i = 0; i < size; i++)
+	{
+		while (count[i])//count中哪个元素为0，说明原数组不存在该下标对应的元素
+		{
+			a[index++] = i + min;
+			count[i]--;
+		}
+	}
+	//记得释放在堆上开辟的空间
+	delete[] count;
+	return;
+
+}
+int main()
+{
+	int arr[] = { 2,6,5,4,3,5,7,8,2,5};
+	CountSort(arr, sizeof(arr) / sizeof(arr[0]));
+	for (int i = 0; i < sizeof(arr) / sizeof(arr[0]); i++)
+	{
+		cout << arr[i] << " ";
+	}
+	system("pause");
+	return 0;
+}
