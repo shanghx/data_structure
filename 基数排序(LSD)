@@ -1,0 +1,82 @@
+#include<iostream>
+#include<assert.h>
+using namespace std;
+
+//基数排序
+int GetCount(int* a, int n)	//统计最多的位数
+{
+	int num = 0;
+	int i = 0;
+	int count = 0;
+	int max = 0;
+	while (i < n)
+	{
+		count = 0;
+		num = a[i];
+		while (num)
+		{
+			num=num / 10;
+			count++;
+		}
+		if (max < count)
+			max = count;
+		i++;
+	}
+	return max;
+}
+void RadixSort(int* a, int n)
+{
+	assert(a);
+	//1.先开辟好空间，来保存中间排好序的数据
+	int* tmp = new int[n];
+	int  Count = GetCount(a, n);//位数
+	
+	int base = 1;//用来循环计算每个数据的每一位
+	while (Count)
+	{
+		//2.统计每个个位相同的数据出现的次数，保存在count数组
+		int count[10] = { 0 };
+		int index = 0;//count的下标
+		for (int i = 0; i < n; i++)
+		{
+			index = (a[i] / base) % 10;
+			count[index]++;
+		}
+
+		//3.计算每个数据要存入tmp数组的开始位置
+		int start[10] = { 0 };
+		for (int i = 1; i < 10; i++)
+		{
+			start[i] = start[i - 1] + count[i- 1];
+		}
+		//4.将数据存放在tmp数组中
+		int num = 0;
+		for (int i = 0; i < n; i++)
+		{
+				num = (a[i] / base) % 10;
+				tmp[start[num]] = a[i];//将有序的数据存入tmp数组中
+				start[num]++;//每次存一个元素，就要把当前对应的起始位置后移一位
+		}
+		//5.将排好序的数据写进原数组中
+		for (int i = 0; i < n; i++)
+		{
+			a[i] = tmp[i];
+		}
+		base *= 10;
+		Count--;
+	}
+	delete[]tmp;
+	return;
+}
+int main()
+{
+	int num[] = {22,31,85,64,52,100,43,65,93,57};
+	int size = sizeof(num) / sizeof(num[0]);
+	RadixSort(num, size);
+	for (int i = 0; i < size; i++)
+	{
+		cout << num[i] << " ";
+	}
+	system("pause");
+	return 0;
+}
